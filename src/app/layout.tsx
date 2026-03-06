@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PayWeek | Accounted to the Penny",
+  title: "Payroll App - Powered by Payweek",
   description: "Precision-driven accounting that goes beyond the balance sheet.",
 };
 
