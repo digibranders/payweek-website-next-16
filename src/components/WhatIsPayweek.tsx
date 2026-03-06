@@ -1,3 +1,8 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
+import type { Variants } from "framer-motion";
+
 const features = [
     {
         title: "Cloud-Based Platform",
@@ -43,73 +48,97 @@ const features = [
     },
 ];
 
+// Stagger variants for feature cards
+const featureCardVariants: Variants = {
+    hidden: { opacity: 0, y: 16 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+};
+
 const WhatIsPayweek = () => {
+    const prefersReducedMotion = useReducedMotion();
+
     return (
         <section
-            className="w-full py-24 px-6 border-b-[1.18px] border-[#e5e5e5]"
+            className="w-full py-20 md:py-24 px-6 border-b-[1.18px] border-[#e5e5e5]"
             style={{
                 backgroundImage:
                     "linear-gradient(54.95deg, #1932C0 0%, #000000 50%, #0FD46B 100%)",
             }}
         >
-            <div className="max-w-[1152px] mx-auto">
+            <div className="max-w-[72rem] mx-auto">
                 {/* Heading */}
-                <div className="text-center mb-16">
+                {/* Justification: dark bg heading uses opacity only — y translate on dark is less readable */}
+                <motion.div
+                    className="text-center mb-14"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                >
                     <h2
                         className="font-bold text-white text-center"
-                        style={{ fontSize: "42px", lineHeight: "50.4px", letterSpacing: "-0.42px" }}
+                        style={{ fontSize: "var(--font-size-h2)", lineHeight: "var(--leading-h2)", letterSpacing: "var(--tracking-h2)" }}
                     >
                         What is PayWeek?
                     </h2>
                     <p
                         className="font-normal text-white text-center mx-auto mt-4"
-                        style={{ fontSize: "17px", lineHeight: "27.2px", maxWidth: "659px" }}
+                        style={{ fontSize: "var(--font-size-body)", lineHeight: "var(--leading-body)", maxWidth: "41.1875rem" }}
                     >
                         PayWeek is a modern, cloud-based accounting and payroll platform powering payroll
                         processing, financial reporting, and tax compliance for 10,000+ businesses globally.
                     </p>
-                </div>
+                </motion.div>
 
                 {/* 3-column feature grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 border-[1.18px] border-[#e5e5e5] mb-10 overflow-hidden">
+                {/* Justification: 3 features are sequential — stagger reveals their relationship */}
+                <motion.div
+                    className="grid grid-cols-1 md:grid-cols-3 border-[1.18px] border-[#e5e5e5] mb-10 overflow-hidden"
+                    variants={prefersReducedMotion ? {} : { hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, amount: 0.15 }}
+                >
                     {features.map((feature, index) => (
-                        <div
+                        <motion.div
                             key={index}
+                            variants={prefersReducedMotion ? {} : featureCardVariants}
                             className={`flex flex-col gap-6 p-8 ${index < features.length - 1 ? "border-b-[1.18px] md:border-b-0 md:border-r-[1.18px] border-[#e5e5e5]" : ""
                                 }`}
                         >
-                            {/* Icon */}
                             <div
-                                className="w-12 h-12 rounded-[10px] flex items-center justify-center shrink-0"
+                                className="w-12 h-12 rounded-[0.625rem] flex items-center justify-center shrink-0"
                                 style={{ backgroundImage: feature.iconGradient }}
                             >
                                 {feature.icon}
                             </div>
-
-                            {/* Title */}
                             <p
                                 className="font-semibold text-white"
-                                style={{ fontSize: "23px", lineHeight: "32.2px" }}
+                                style={{ fontSize: "var(--font-size-h4)", lineHeight: "var(--leading-h4)" }}
                             >
                                 {feature.title}
                             </p>
-
-                            {/* Description */}
                             <p
                                 className="font-normal text-white"
-                                style={{ fontSize: "17px", lineHeight: "27.2px" }}
+                                style={{ fontSize: "var(--font-size-body)", lineHeight: "var(--leading-body)" }}
                             >
                                 {feature.description}
                             </p>
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
 
                 {/* Our Mission card */}
-                <div className="border-[1.18px] border-[#e5e5e5] px-16 py-12 flex flex-col items-center text-center mx-auto" style={{ maxWidth: "896px" }}>
-                    {/* Green lightning icon */}
+                <motion.div
+                    className="border-[1.18px] border-[#e5e5e5] px-8 md:px-16 py-12 flex flex-col items-center text-center mx-auto"
+                    style={{ maxWidth: "56rem" }}
+                    initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                >
                     <div
-                        className="w-16 h-16 rounded-[16.4px] flex items-center justify-center mb-8"
+                        className="w-16 h-16 rounded-[1.025rem] flex items-center justify-center mb-8"
                         style={{ backgroundImage: "linear-gradient(135deg, rgb(208, 250, 229) 0%, rgb(164, 244, 207) 100%)" }}
                     >
                         <svg width="36" height="36" viewBox="0 0 24 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -119,24 +148,22 @@ const WhatIsPayweek = () => {
                             />
                         </svg>
                     </div>
-
                     <h3
                         className="font-semibold text-white text-center mb-6"
-                        style={{ fontSize: "30px", lineHeight: "39px", letterSpacing: "-0.3px" }}
+                        style={{ fontSize: "var(--font-size-h3)", lineHeight: "var(--leading-h3)", letterSpacing: "var(--tracking-h3)" }}
                     >
                         Our Mission
                     </h3>
-
                     <p
                         className="font-normal text-white text-center"
-                        style={{ fontSize: "17px", lineHeight: "27.2px", maxWidth: "765px" }}
+                        style={{ fontSize: "var(--font-size-body)", lineHeight: "var(--leading-body)", maxWidth: "47.8125rem" }}
                     >
                         We&apos;re revolutionizing financial management for modern businesses. Financial
                         operations should empower you, not hold you back. We&apos;re reimagining accounting
                         software from a simple number cruncher to a full intelligence engine that provides
                         insights and automation at every step.
                     </p>
-                </div>
+                </motion.div>
             </div>
         </section>
     );

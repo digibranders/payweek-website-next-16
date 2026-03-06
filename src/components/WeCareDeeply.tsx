@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
+import type { Variants } from "framer-motion";
 
 // ─── Exact Figma Dotted Globe (node 120:805) ─────────────────────────────────
 function DotSphere() {
@@ -51,42 +55,73 @@ const stats = [
     { value: "24/7", label: "Support Available" },
 ];
 
+// Stagger variants
+const principleCardVariants: Variants = {
+    hidden: { opacity: 0, y: 16 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+};
+
 // ─── Component ────────────────────────────────────────────────────────────────
 const WeCareDeeply = () => {
+    const prefersReducedMotion = useReducedMotion();
+
     return (
         <section className="bg-white w-full" style={{ borderBottom: '1.18px solid #e5e5e5' }}>
-            <div className="max-w-[1152px] mx-auto" style={{ padding: '0 24px' }}>
+            <div className="max-w-[72rem] mx-auto px-6">
 
                 {/* Globe + Heading + Subtitle */}
-                <div className="flex flex-col items-center text-center" style={{ paddingTop: '96px', paddingBottom: '64px' }}>
-                    <div className="flex items-center justify-center" style={{ marginBottom: '40px' }}>
+                <div className="flex flex-col items-center text-center pt-20 md:pt-24 pb-14">
+                    {/* Justification: globe is the focal element — subtle scale entrance draws attention to it */}
+                    <motion.div
+                        className="flex items-center justify-center mb-10"
+                        initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                    >
                         <DotSphere />
-                    </div>
+                    </motion.div>
 
-                    <h2
+                    <motion.h2
                         className="font-bold text-[#171717] text-center"
-                        style={{ fontSize: "42px", lineHeight: "50.4px", letterSpacing: "-0.42px" }}
+                        style={{ fontSize: "var(--font-size-h2)", lineHeight: "var(--leading-h2)", letterSpacing: "var(--tracking-h2)" }}
+                        initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 16 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{ duration: 0.4, ease: "easeOut", delay: 0.05 }}
                     >
                         We care deeply about the human link
-                    </h2>
-                    <p
-                        className="font-normal text-[#525252] text-center mx-auto"
-
-                        style={{ fontSize: "17px", lineHeight: "27.2px", maxWidth: "647px" }}
+                    </motion.h2>
+                    <motion.p
+                        className="font-normal text-[#525252] text-center mx-auto mt-4"
+                        style={{ fontSize: "var(--font-size-body)", lineHeight: "var(--leading-body)", maxWidth: "40.4375rem" }}
+                        initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 16 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
                     >
                         PayWeek is a fully-remote, small but mighty global team united by speed, action,
                         and a shared passion for transforming financial operations.
-                    </p>
+                    </motion.p>
                 </div>
 
                 {/* 3-column principle cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3" style={{ border: '1.18px solid #e5e5e5' }}>
+                {/* Justification: 3 principles in a row — stagger reveals their sequence */}
+                <motion.div
+                    className="grid grid-cols-1 md:grid-cols-3"
+                    style={{ border: '1.18px solid #e5e5e5' }}
+                    variants={prefersReducedMotion ? {} : { hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, amount: 0.15 }}
+                >
                     {principles.map((p, index) => (
-                        <div
+                        <motion.div
                             key={index}
+                            variants={prefersReducedMotion ? {} : principleCardVariants}
                             className="flex flex-col items-center text-center"
                             style={{
-                                padding: '32px',
+                                padding: '2rem',
                                 ...(index < principles.length - 1
                                     ? { borderRight: '1.18px solid #e5e5e5' }
                                     : {}),
@@ -95,9 +130,9 @@ const WeCareDeeply = () => {
                             <div
                                 className="flex items-center justify-center shrink-0"
                                 style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    borderRadius: '10px',
+                                    width: '3rem',
+                                    height: '3rem',
+                                    borderRadius: '0.625rem',
                                     backgroundImage: p.iconGradient,
                                 }}
                             >
@@ -105,46 +140,51 @@ const WeCareDeeply = () => {
                             </div>
                             <p
                                 className="font-semibold text-[#171717]"
-                                style={{ fontSize: '23px', lineHeight: '32.2px', marginTop: '16px' }}
+                                style={{ fontSize: 'var(--font-size-h4)', lineHeight: 'var(--leading-h4)', marginTop: '1rem' }}
                             >
                                 {p.title}
                             </p>
                             <p
                                 className="font-normal text-[#525252]"
-                                style={{ fontSize: '17px', lineHeight: '27.2px', maxWidth: '296px', marginTop: '8px' }}
+                                style={{ fontSize: 'var(--font-size-body)', lineHeight: 'var(--leading-body)', maxWidth: '18.5rem', marginTop: '0.5rem' }}
                             >
                                 {p.description}
                             </p>
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
 
-                {/* Stats bar — no vertical dividers, just top border */}
-                <div
+                {/* Stats bar */}
+                {/* Justification: stats appear as supporting data — opacity reveal is enough */}
+                <motion.div
                     className="grid grid-cols-2 md:grid-cols-4"
-                    style={{ borderTop: '1.18px solid #e5e5e5', marginTop: '64px', paddingBottom: '48px' }}
+                    style={{ borderTop: '1.18px solid #e5e5e5', marginTop: '4rem', paddingBottom: '3rem' }}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
                 >
                     {stats.map((stat, index) => (
                         <div
                             key={index}
                             className="flex flex-col items-center justify-center text-center"
-                            style={{ gap: '4px', paddingTop: '48px' }}
+                            style={{ gap: '0.25rem', paddingTop: '3rem' }}
                         >
                             <p
                                 className="font-normal text-[#171717]"
-                                style={{ fontSize: '30px', lineHeight: '36px' }}
+                                style={{ fontSize: 'var(--font-size-h3)', lineHeight: '2.25rem' }}
                             >
                                 {stat.value}
                             </p>
                             <p
                                 className="font-normal text-[#525252]"
-                                style={{ fontSize: '13px', lineHeight: '24px' }}
+                                style={{ fontSize: 'var(--font-size-xs)', lineHeight: 'var(--leading-base)' }}
                             >
                                 {stat.label}
                             </p>
                         </div>
                     ))}
-                </div>
+                </motion.div>
 
             </div>
         </section>

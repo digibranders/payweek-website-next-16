@@ -5,23 +5,50 @@
   --foreground: #171717;
 }
 
-@theme inline {
+@theme {
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-payweek-green: #0fd46b;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-arimo: var(--font-arimo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* ── Type scale (rem, 16px base) ── */
+  --font-size-h1: 3.5rem;       /* 56px */
+  --font-size-h2: 2.625rem;     /* 42px */
+  --font-size-h3: 1.875rem;     /* 30px */
+  --font-size-h4: 1.4375rem;    /* 23px */
+  --font-size-body: 1.0625rem;  /* 17px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-xs: 0.8125rem;    /* 13px */
+
+  /* ── Line heights (rem) ── */
+  --leading-h1: 3.85rem;        /* 61.6px */
+  --leading-h2: 3.15rem;        /* 50.4px */
+  --leading-h3: 2.4375rem;      /* 39px */
+  --leading-h4: 2.0125rem;      /* 32.2px */
+  --leading-body: 1.7rem;       /* 27.2px */
+  --leading-base: 1.5rem;       /* 24px */
+  --leading-sm: 1.25rem;        /* 20px */
+
+  /* ── Letter spacing (rem) ── */
+  --tracking-h1: -0.07rem;      /* -1.12px */
+  --tracking-h2: -0.02625rem;   /* -0.42px */
+  --tracking-h3: -0.01875rem;   /* -0.3px */
+
+  /* ── Border radius ── */
+  --radius-btn: 0.425rem;       /* 6.8px */
+  --radius-card: 0.625rem;      /* 10px */
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+
