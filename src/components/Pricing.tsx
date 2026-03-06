@@ -156,8 +156,7 @@ const Pricing = () => {
                 padding: "2.5rem 2rem",
                 gap: "2rem",
               }}
-              whileHover={prefersReducedMotion ? {} : { y: -5, zIndex: 20 }}
-              transition={{ duration: 0.25 }}
+
             >
               {/* "Most Popular" badge */}
               {plan.popular && (
@@ -249,7 +248,7 @@ const Pricing = () => {
               {/* ── CTA button ────────────────────────── */}
               <Link
                 href="#"
-                className="flex items-center justify-center w-full font-medium transition-colors"
+                className="flex items-center justify-center w-full font-medium transition-all hover:opacity-90 active:scale-[0.98]"
                 style={{
                   height: "3.25rem",
                   borderRadius: "0.625rem",
