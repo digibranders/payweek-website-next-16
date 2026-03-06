@@ -14,7 +14,18 @@ const Hero = () => {
   });
 
   return (
-    <section className="relative w-full flex flex-col items-center justify-center bg-white px-6 py-20 md:py-28 overflow-hidden border-b border-neutral-100">
+    <section className="relative w-full flex flex-col items-center justify-center bg-white px-6 py-20 md:py-28 overflow-hidden">
+      {/* Desktop vertical lines forming the central column, matching notch pocket */}
+      <div 
+        className="hidden md:block absolute top-0 bottom-0 pointer-events-none border-x border-neutral-200"
+        style={{
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "65%",
+        }}
+        aria-hidden="true"
+      />
+
       <div className="relative z-10 w-full max-w-[42rem] mx-auto flex flex-col items-center text-center gap-14">
         {/* Heading + subtitle */}
         <div className="flex flex-col items-center text-center gap-4">
