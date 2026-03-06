@@ -11,12 +11,15 @@ const tabs = [
 ];
 
 // ─── Desktop notch geometry (Figma viewBox 1441.08 × 669.16) ─────────────────
+// Notch pocket spans x=472.544 → x=969.456 in the viewBox.
+// That's 496.912 / 1441.08 = 34.48% of viewport width at any screen size.
 const NOTCH_H = 44.5;
-// The pocket occupies (969.456 - 472.544) / 1441.08 = 34.48% of the SVG viewBox.
-// Since the SVG fills 100vw with preserveAspectRatio="none", the notch pocket
-// always equals 34.48% of the viewport width at any screen size.
-// Tab container must use the same percentage — NOT a fixed px value.
 const NOTCH_POCKET_PCT = "34.48%";
+
+// Exact Figma SVG path — NOT generated dynamically.
+// Using the original Bezier curves ensures pixel-perfect notch at every viewport.
+const NOTCH_PATH =
+  "M1441.08 669.16V0H969.456C959.48 0 950.157 4.95865 944.581 13.2302L932.419 31.2698C926.843 39.5413 917.52 44.5 907.544 44.5H534.456C524.48 44.5 515.157 39.5413 509.581 31.2698L497.419 13.2302C491.843 4.95865 482.52 0 472.544 0H0V669.16H1441.08Z";
 
 // ─── Component ─────────────────────────────────────────────────────────────────
 const Features = () => {
@@ -25,10 +28,10 @@ const Features = () => {
   return (
     <>
       {/* ══════════════════════════════════════════════════════════════
-          MOBILE LAYOUT  (< md)
-          - Plain CSS gradient (no SVG notch)
-          - Tabs floating on gradient, full-width container
-          - Image: fixed h-[285px], rounded top only, no chrome frame
+          MOBILE  (< 768px)  —  md:hidden
+          - No notch — plain CSS gradient
+          - Floating pill tabs on gradient
+          - Image with aspect-ratio, rounded top only, no chrome frame
           Matches Figma node 120:1395
          ══════════════════════════════════════════════════════════════ */}
       <section
@@ -49,7 +52,8 @@ const Features = () => {
                 borderRadius: 10,
                 fontSize: 14,
                 fontWeight: 500,
-                border: activeTab === tab.id ? "none" : "1.18px solid #a6a7a7",
+                border:
+                  activeTab === tab.id ? "none" : "1.18px solid #a6a7a7",
                 cursor: "pointer",
                 transition: "background 0.2s",
                 lineHeight: 1,
@@ -65,7 +69,7 @@ const Features = () => {
           ))}
         </div>
 
-        {/* Mobile dashboard image — aspect-ratio height, rounded top only, no frame */}
+        {/* Mobile dashboard image — aspect-ratio, rounded top, no chrome frame */}
         <div
           className="relative w-full overflow-hidden"
           style={{
@@ -93,15 +97,18 @@ const Features = () => {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          DESKTOP LAYOUT  (≥ md)
-          - SVG gradient with notch cutout
-          - Tabs inside the notch pocket
-          - Dashboard: chrome frame + aspect-ratio image
-          Matches Figma node 120:1395 desktop
+          TABLET + DESKTOP  (≥ 768px)  —  hidden md:block
+          - Fixed Figma SVG path with preserveAspectRatio="none"
+          - Tabs positioned at 34.48% width (matches SVG notch pocket)
+          - Chrome frame around dashboard image
+          - clamp() for fluid tab sizing across 768–1440px+
          ══════════════════════════════════════════════════════════════ */}
       <section className="hidden md:block relative w-full overflow-hidden">
-        {/* Layer A: SVG gradient + notch */}
-        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        {/* Layer A: SVG gradient + notch (exact Figma path) */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          aria-hidden="true"
+        >
           <svg
             viewBox="0 0 1441.08 669.16"
             width="100%"
@@ -125,28 +132,25 @@ const Features = () => {
                 <stop offset="0.691852" stopColor="#1932C0" />
               </linearGradient>
             </defs>
-            <path
-              d="M1441.08 669.16V0H969.456C959.48 0 950.157 4.95865 944.581 13.2302L932.419 31.2698C926.843 39.5413 917.52 44.5 907.544 44.5H534.456C524.48 44.5 515.157 39.5413 509.581 31.2698L497.419 13.2302C491.843 4.95865 482.52 0 472.544 0H0V669.16H1441.08Z"
-              fill="url(#features-bg-gradient-desktop)"
-            />
+            <path d={NOTCH_PATH} fill="url(#features-bg-gradient-desktop)" />
           </svg>
         </div>
 
-        {/* Layer B: Tabs inside the notch pocket */}
-        {/*
-          Tab container width = 34.48% of viewport (matches SVG pocket geometry exactly).
-          Font uses clamp(11px, 1.1vw, 13px):
-            - 768px  → 11px  → tabs ≈ 225px, fits in 264px notch  ✓
-            - 1024px → 11.3px (≈11px) → fits in 353px notch        ✓
-            - 1440px → 13px  → tabs ≈ 280px, fits in 496px notch   ✓ (Figma spec)
+        {/* Layer B: Tabs inside the notch pocket
+            Container width = 34.48% of viewport — always matches the SVG pocket.
+            Font & padding use clamp() for fluid scaling:
+              768px  → 11px font, 4px/6px padding  → tabs ≈ 226px in 265px pocket  ✓
+              1024px → 10.2px→11px, comfortable     → tabs in 353px pocket           ✓
+              1440px → 14px font, 6px/12px padding  → tabs ≈ 330px in 496px pocket  ✓ (Figma spec)
         */}
         <div
-          className="absolute top-0 z-20 flex items-center justify-center gap-1"
+          className="absolute top-0 z-20 flex items-center justify-center"
           style={{
             left: "50%",
             transform: "translateX(-50%)",
             height: NOTCH_H,
             width: NOTCH_POCKET_PCT,
+            gap: "clamp(4px, 0.5vw, 8px)",
           }}
         >
           {tabs.map((tab) => (
@@ -154,9 +158,9 @@ const Features = () => {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               style={{
-                padding: "clamp(4px, 0.35vw, 5px) clamp(5px, 0.55vw, 8px)",
+                padding: "clamp(4px, 0.35vw, 6px) clamp(6px, 0.6vw, 12px)",
                 borderRadius: 10,
-                fontSize: "clamp(11px, 1.1vw, 13px)",
+                fontSize: "clamp(11px, 1vw, 14px)",
                 fontWeight: 500,
                 border: "none",
                 cursor: "pointer",

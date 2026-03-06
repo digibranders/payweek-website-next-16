@@ -100,10 +100,19 @@ const Navigation = () => {
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="fixed inset-0 z-[100] bg-white flex flex-col"
           >
-            {/* Top bar with close button */}
-            <div className="flex items-center justify-end h-[3.0625rem] px-3 shrink-0">
+            {/* Top bar with logo and close button */}
+            <div className="flex items-center justify-between h-[3.0625rem] px-6 shrink-0">
+              <Link href="/" className="flex items-center gap-2" onClick={() => setMenuOpen(false)}>
+                <Image
+                  src="/logo.png"
+                  alt="PayWeek Logo"
+                  width={120}
+                  height={34}
+                  className="h-8 w-auto object-contain"
+                />
+              </Link>
               <button
-                className="p-2 text-neutral-600 cursor-pointer"
+                className="p-2 -mr-2 text-neutral-600 cursor-pointer"
                 onClick={() => setMenuOpen(false)}
                 aria-label="Close menu"
               >

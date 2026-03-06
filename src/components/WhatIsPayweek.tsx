@@ -59,7 +59,7 @@ const WhatIsPayweek = () => {
 
     return (
         <section
-            className="w-full py-20 md:py-24 px-6 border-b-[1.18px] border-[#e5e5e5]"
+            className="w-full py-20 md:py-24 px-6 border-b-[1.18px] border-white/20"
             style={{
                 backgroundImage:
                     "linear-gradient(54.95deg, #1932C0 0%, #000000 50%, #0FD46B 100%)",
@@ -93,7 +93,7 @@ const WhatIsPayweek = () => {
                 {/* 3-column feature grid */}
                 {/* Justification: 3 features are sequential — stagger reveals their relationship */}
                 <motion.div
-                    className="grid grid-cols-1 md:grid-cols-3 border-[1.18px] border-[#e5e5e5] mb-10 overflow-hidden"
+                    className="grid grid-cols-1 md:grid-cols-3 border-[1.18px] border-white/20 mb-10 overflow-hidden"
                     variants={prefersReducedMotion ? {} : { hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
                     initial="hidden"
                     whileInView="show"
@@ -103,7 +103,7 @@ const WhatIsPayweek = () => {
                         <motion.div
                             key={index}
                             variants={prefersReducedMotion ? {} : featureCardVariants}
-                            className={`flex flex-col gap-6 p-8 ${index < features.length - 1 ? "border-b-[1.18px] md:border-b-0 md:border-r-[1.18px] border-[#e5e5e5]" : ""
+                            className={`flex flex-col gap-6 p-8 ${index < features.length - 1 ? "border-b-[1.18px] md:border-b-0 md:border-r-[1.18px] border-white/20" : ""
                                 }`}
                         >
                             <div
@@ -130,7 +130,7 @@ const WhatIsPayweek = () => {
 
                 {/* Our Mission card */}
                 <motion.div
-                    className="border-[1.18px] border-[#e5e5e5] px-8 md:px-16 py-12 flex flex-col items-center text-center mx-auto"
+                    className="border-[1.18px] border-white/20 px-8 md:px-16 py-12 flex flex-col items-center text-center mx-auto"
                     style={{ maxWidth: "56rem" }}
                     initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 16 }}
                     whileInView={{ opacity: 1, y: 0 }}

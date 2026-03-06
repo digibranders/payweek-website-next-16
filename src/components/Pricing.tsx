@@ -90,18 +90,17 @@ const Pricing = () => {
         borderTop: "1.18px solid #e5e5e5",
         borderBottom: "1.18px solid #e5e5e5",
         paddingTop: "6rem",
-        paddingBottom: "0",
+        paddingBottom: "2rem",
       }}
     >
       <div
-        className="mx-auto"
-        style={{ maxWidth: "1280px", padding: "0 80px" }}
+        className="mx-auto px-6 md:px-20"
+        style={{ maxWidth: "1280px" }}
       >
         {/* ── Header ─────────────────────────────────────── */}
-        {/* Justification: section header reveal signals content is arriving */}
         <motion.div
           className="text-center"
-          style={{ marginBottom: "4rem", padding: "0 1.5rem" }}
+          style={{ marginBottom: "4rem" }}
           initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -110,9 +109,9 @@ const Pricing = () => {
           <h2
             className="font-bold text-[#171717]"
             style={{
-              fontSize: "var(--font-size-h2)",
-              lineHeight: "var(--leading-h2)",
-              letterSpacing: "var(--tracking-h2)",
+              fontSize: "clamp(24px, 5vw, 36px)",
+              lineHeight: "1.2",
+              letterSpacing: "-0.02em",
             }}
           >
             Simple, Transparent Pricing
@@ -120,8 +119,8 @@ const Pricing = () => {
           <p
             className="font-normal text-[#525252] mx-auto"
             style={{
-              fontSize: "var(--font-size-body)",
-              lineHeight: "var(--leading-body)",
+              fontSize: "15px",
+              lineHeight: "24px",
               maxWidth: "38.6875rem",
               marginTop: "1rem",
             }}
@@ -132,48 +131,32 @@ const Pricing = () => {
         </motion.div>
 
         {/* ── Cards container ────────────────────────────── */}
-        {/* Justification: 3 plan tiers are sequential choices — stagger reveals comparison */}
-        {/*
-          overflow:hidden removed so the "Most Popular" badge (positioned above the top border)
-          is not clipped. Border-radius is applied directly to the corner cards instead.
-          Card 0 (mobile: top corners, desktop: left corners)
-          Card 2 (mobile: bottom corners, desktop: right corners)
-        */}
         <motion.div
-          className="mx-auto grid grid-cols-1 md:grid-cols-3"
-          style={{
-            maxWidth: "72rem",
-            border: "1.18px solid #e5e5e5",
-            borderRadius: "0.625rem",
-          }}
+          className="mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0"
+          style={{ maxWidth: "72rem" }}
           variants={prefersReducedMotion ? {} : cardContainerVariants}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.1 }}
         >
-          {plans.map((plan, idx) => {
-            // Round corner cards to match outer container border-radius (no overflow:hidden)
-            const cornerRadius =
-              idx === 0
-                ? "rounded-tl-[0.625rem] rounded-tr-[0.625rem] md:rounded-tr-[0] md:rounded-bl-[0.625rem]"
-                : idx === plans.length - 1
-                ? "rounded-bl-[0.625rem] rounded-br-[0.625rem] md:rounded-bl-[0] md:rounded-tr-[0.625rem]"
-                : "";
-
-            return (
+          {plans.map((plan, idx) => (
             <motion.div
               key={idx}
               variants={prefersReducedMotion ? {} : cardVariants}
-              className={`flex flex-col bg-white relative ${cornerRadius}`}
+              className={`
+                flex flex-col bg-white relative rounded-[10px] 
+                border-[#e5e5e5] border-[1.18px] border-solid 
+                shadow-[0px_4px_6px_0px_rgba(0,0,0,0.1),0px_2px_4px_0px_rgba(0,0,0,0.1)]
+                md:shadow-none md:rounded-none
+                ${idx === 0 ? "md:rounded-l-[10px] md:border-r-0" : ""}
+                ${idx === 1 ? "md:border-r-0" : ""}
+                ${idx === plans.length - 1 ? "md:rounded-r-[10px]" : ""}
+              `}
               style={{
-                padding: "2rem",
+                padding: "2.5rem 2rem",
                 gap: "2rem",
-                ...(idx < plans.length - 1
-                  ? { borderRight: "1.18px solid #e5e5e5" }
-                  : {}),
               }}
-              // Justification: card hover lift confirms interactivity — highlights the plan being considered
-              whileHover={prefersReducedMotion ? {} : { y: -3 }}
+              whileHover={prefersReducedMotion ? {} : { y: -5, zIndex: 20 }}
               transition={{ duration: 0.25 }}
             >
               {/* "Most Popular" badge */}
@@ -181,7 +164,7 @@ const Pricing = () => {
                 <div
                   className="absolute flex items-center justify-center"
                   style={{
-                    top: "-1px",
+                    top: "0px",
                     left: "50%",
                     transform: "translate(-50%, -50%)",
                     backgroundColor: "#0fd46b",
@@ -192,6 +175,7 @@ const Pricing = () => {
                     borderRadius: "7px",
                     padding: "5px 30px",
                     whiteSpace: "nowrap",
+                    zIndex: 30,
                   }}
                 >
                   Most Popular
@@ -203,9 +187,9 @@ const Pricing = () => {
                 <p
                   className="font-semibold text-[#171717]"
                   style={{
-                    fontSize: "var(--font-size-h3)",
-                    lineHeight: "var(--leading-h3)",
-                    letterSpacing: "var(--tracking-h3)",
+                    fontSize: "20px",
+                    lineHeight: "28px",
+                    letterSpacing: "-0.01em",
                   }}
                 >
                   {plan.name}
@@ -213,23 +197,23 @@ const Pricing = () => {
                 <p
                   className="font-normal text-[#525252]"
                   style={{
-                    fontSize: "var(--font-size-body)",
-                    lineHeight: "var(--leading-body)",
+                    fontSize: "15px",
+                    lineHeight: "22px",
                   }}
                 >
                   {plan.description}
                 </p>
-                <div className="flex items-baseline" style={{ gap: "0.5rem" }}>
+                <div className="flex items-baseline" style={{ gap: "0.5rem", marginTop: "0.5rem" }}>
                   <span
-                    className="font-normal text-[#171717]"
-                    style={{ fontSize: "var(--font-size-base)", lineHeight: "var(--leading-base)" }}
+                    className="font-bold text-[#171717]"
+                    style={{ fontSize: "16px", lineHeight: "1" }}
                   >
                     {plan.price}
                   </span>
                   {plan.period && (
                     <span
                       className="font-normal text-[#737373]"
-                      style={{ fontSize: "var(--font-size-base)", lineHeight: "var(--leading-base)" }}
+                      style={{ fontSize: "14px", lineHeight: "1" }}
                     >
                       {plan.period}
                     </span>
@@ -242,7 +226,7 @@ const Pricing = () => {
                 {plan.features.map((feature, fIdx) => (
                   <li
                     key={fIdx}
-                    className="flex items-center"
+                    className="flex items-start"
                     style={{ gap: "12px" }}
                   >
                     <Image
@@ -250,11 +234,11 @@ const Pricing = () => {
                       alt=""
                       width={20}
                       height={20}
-                      className="shrink-0"
+                      className="shrink-0 mt-0.5"
                     />
                     <span
                       className="font-normal text-[#525252]"
-                      style={{ fontSize: "var(--font-size-base)", lineHeight: "var(--leading-base)" }}
+                      style={{ fontSize: "14px", lineHeight: "20px" }}
                     >
                       {feature}
                     </span>
@@ -265,12 +249,11 @@ const Pricing = () => {
               {/* ── CTA button ────────────────────────── */}
               <Link
                 href="#"
-                className="flex items-center justify-center w-full font-normal"
+                className="flex items-center justify-center w-full font-medium transition-colors"
                 style={{
-                  height: "3.125rem",
+                  height: "3.25rem",
                   borderRadius: "0.625rem",
-                  fontSize: "var(--font-size-base)",
-                  lineHeight: "var(--leading-base)",
+                  fontSize: "14px",
                   ...(plan.popular
                     ? {
                       backgroundColor: "#0fd46b",
@@ -286,17 +269,16 @@ const Pricing = () => {
                 {plan.cta}
               </Link>
             </motion.div>
-            );
-          })}
+          ))}
         </motion.div>
 
         {/* ── Bottom note ─────────────────────────────── */}
         <p
           className="text-center font-normal text-[#525252]"
           style={{
-            fontSize: "var(--font-size-body)",
-            lineHeight: "var(--leading-body)",
-            padding: "4rem 0",
+            fontSize: "15px",
+            lineHeight: "24px",
+            padding: "4rem 0 2rem",
           }}
         >
           All plans include a 14-day free trial. No credit card required.
